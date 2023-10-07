@@ -1,0 +1,207 @@
+---
+title: Title of my report
+format:
+  manuscript_template-pdf: default
+cite-method: natbib
+author:
+  - name: Jane Doe
+    url: https://example.com
+    orcid: 0000-0000-0000-0000
+    affiliations:
+      - id: some-inst
+        name: Institute for Cool Things
+        url: https://example.com
+      - id: some-uni
+        name: University of Awesome Research
+        url: https://example.com
+    email: corresponding email
+  - name: John Doe
+    affiliations:
+      - ref: some-inst 
+address:
+  - code: a
+    address: Institute of Smoke and Magic, University of Sometown, Sometown, XY, 12345
+  - code: b
+    address: Department of Neat Tricks, Whereever State University, Someplace, MC, 67890
+# Optional: line of arbitrary text with additional information.
+#date_subtitle: Published in *Journal of Statistical Software*, 2018
+lead_author_surname: Jane Doe and John Doe
+doi_footer: "Course ID"
+abstract: |
+  Your abstract will be typeset here, and used by default a visually distinctive font.
+  An abstract should explain to the general reader the major contributions of the article. 
+# Optional: Acknowledgements
+acknowledgements: |
+  This template package builds upon, and extends, the work of the excellent
+  gratefully acknowledged as this work would not have been possible without them.  Our extensions
+  are under the same respective licensing term
+  [rticles](https://cran.r-project.org/package=rticles) package, and both packages rely on the
+  [PNAS LaTeX](http://www.pnas.org/site/authors/latex.xhtml) macros. Both these sources are
+  ([GPL-3](https://www.gnu.org/licenses/gpl-3.0.en.html) and
+  [LPPL (>= 1.3)](https://www.latex-project.org/lppl/)).
+# Optional: One or more keywords
+keywords:
+  - one
+  - two
+  - optional
+  - keywords
+  - here
+papersize: letter
+fontsize: 11pt
+linkcolor: "0000FF"
+headercolor: "000000"
+# Optional: Force one-column layout, default is two-column
+#manuscript_mode: true
+# Optional: Enables lineno mode, but only if manuscript_mode mode is also true
+#lineno: true
+# Optional: Enable one-sided layout, default is two-sided
+#one_sided: true
+# Optional: Enable section numbering, default is unnumbered
+#numbersections: true
+# Optional: Specify the depth of section number, default is 5
+#secnumdepth: 5
+# Optional: Skip inserting final break between acknowledgements, default is false
+skip_final_break: true
+# Optional: Bibliography 
+bibliography: bibliography.bib
+# Optional: Enable a 'Draft' watermark on the document
+#watermark: true
+footer_contents: "Short Title"
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## Introduction
+
+This is a document template made with _pandoc_. It uses [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) to format text. Go to this [link](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) to see some more markdown tips on how to format.
+
+I suggest that you use [Zotero](https://www.zotero.org) as your citation manager. Then you can export your citation library into a BibTex file (`.bib`). You can cite any paper that has an entry into the `bibliography.bib` file of this directory by typing `@` and enter the short "_`@`-code_" for that citation [@Tyagi1996]. Entering the citation into a sentence without brackets will cite it within the sentence, like this: "_As has been pointed out by @Tyagi1996 ..._". If you want multiple citations within a single paranthesis you simply enter them after each other with a semicolon (`;`) separating each citation [@Dussoix1962; @Tyagi1996; @Sanger1977]. I would also recommend the [doi2bib.org](https://www.doi2bib.org/) website wher eyou can simply paste in a DOI and get the corresponding BibTeX  entry to copy and paste into your `.bib` file.
+
+## Author Affiliations
+
+Per common academic best practice, you can include your department,
+institution, and complete address, with the ZIP/postal code, for each
+author. Use lower case letters to match authors with institutions, as
+shown in the example. Authors with an ORCID ID may supply this
+information at submission.
+
+## Document Options
+
+We support several options via the YAML header
+
+-   Line of custom text in subtitle (`date_subtitle`) suitable to give
+    publication info of the draft, e.g. journal name in a post-print;
+-   Document date that appears in the footer can be specified manually
+    using `document_date`.
+
+
+## Inline R Code
+
+You can directly enter R code and generate plots or figures directly in the document. If you dont want to show the code block generating the figure you simply set **`echo=FALSE`** for that code block. 
+
+Here I'm loading the `ggplot` package and then I use some sample data that comes with R to plot a scatterplot with `ggplot` 
+
+```{r figex, fig.width=3, fig.height=3, cache=TRUE, echo=TRUE, fig.cap="**This plot shows a scatterplot.** If you would have multiple panels. **a)** You can simply describe them here. **b)** and here. **c)** Also like this."}
+library(ggplot2)
+ggplot(mtcars, aes(wt, mpg)) +
+    geom_point(size=3, aes(colour=factor(cyl))) +
+    theme(legend.position="none")
+```
+
+There are some additional settings for the figure:
+
+-   figure width and height (`fig.width`, `fig.height`), both set to
+    three inches;
+-   the caption (`fig.cap`) lets you add a custom caption for your figure. You dont have to keep track of your figure numbers since this is automatically updated.
+
+## Digital Figures
+
+Markdown, Pandoc and LaTeX support `.eps` and `.pdf` files.
+
+Figures and Tables should be labelled and referenced in the standard way
+using the `\label{}` and `\ref{}` commands.
+
+The R examples above show how to insert a column-wide figure. To insert
+a figure wider than one column, please use the
+`\begin{figure*}...\end{figure*}` environment.
+
+One (roundabout) way of doing this is to *not* actually plot a figure,
+but to save it in a file as the following segment shows:
+
+```{r densityPlot, echo=TRUE}
+library(ggplot2)
+p <- ggplot(data = midwest,
+            mapping = aes(x = area,
+                          fill = state,
+                          color = state)) +
+    geom_density(alpha = 0.3)
+## save to file
+suppressMessages(ggsave("densities.pdf", p))
+```
+
+This file is then included via standard LaTeX commands.
+
+```{=tex}
+\begin{figure*}
+  \begin{center}
+    \includegraphics[width=0.66\textwidth, height=3.5in]{densities} 
+  \end{center}
+  \caption{Wide ggplot2 figure}\label{fig}
+\end{figure*}
+```
+## Typeset Code (But Do Not Run It)
+
+We can also just show code.
+
+``` r
+xx <- faithful[,"eruptions"]
+fit <- density(xx)
+plot(fit)
+```
+
+This simply used a pandoc bloc started and ended by three backticks,
+with `r` as the language choice. Similarly, *many* other languages can
+be typeset directly simply by relying on pandoc.
+
+## Single column equations
+
+Authors may use 1- or 2-column equations in their article, according to
+their preference.
+
+To allow an equation to span both columns, options are to use the
+`\begin{figure*}...\end{figure*}` environment mentioned above for
+figures. The `\begin{widetext}...\end{widetext}` environment as shown in
+equation \ref{eqn:example} below is deprecated, but \LaTeX commands
+`\onecolumn` and `\twocolumn` work fine.
+
+Please note that this option may run into problems with floats and
+footnotes, as mentioned in the [cuted package
+documentation](http://texdoc.net/pkg/cuted). In the case of problems
+with footnotes, it may be possible to correct the situation using
+commands `\footnotemark` and `\footnotetext`.
+
+```{=tex}
+\begin{equation}
+  \begin{aligned}
+(x+y)^3&=(x+y)(x+y)^2\\
+       &=(x+y)(x^2+2xy+y^2) \\
+       &=x^3+3x^2y+3xy^3+x^3. 
+       \label{eqn:example} 
+  \end{aligned}
+\end{equation}
+```
+```{=html}
+<!-- pandoc writes all tables using longtable, which fails in 2-column mode
+
+  Species                    CBS     CV     G3
+  ----------------------- ------ ------ ------
+  1\. Acetaldehyde           0.0    0.0    0.0
+  2\. Vinyl alcohol          9.1    9.6   13.5
+  3\. Hydroxyethylidene     50.8   51.2   54.0
+
+  : Comparison of the fitted potential energy surfaces and ab initio
+  benchmark electronic energy calculations
+
+-->
+```

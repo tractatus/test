@@ -1,0 +1,18 @@
+title: Manuscript_template
+author: Daniel Fürth
+version: 1.0.0
+quarto-required: ">=1.2.0"
+contributes:
+  formats:
+    common:
+      toc: false
+      filters:
+        - furthlab.lua
+    pdf:
+      template: header.tex
+      format-resources:
+        - jss.bst
+        - pinp.cls
+    html:
+      css: styles.css
+
